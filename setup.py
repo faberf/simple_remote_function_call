@@ -6,7 +6,7 @@ with open('DESCRIPTION.txt') as file:
   
   
 # specify requirements of your package here
-REQUIREMENTS = ['flask']
+REQUIREMENTS = ['flask', 'waitress']
   
 # some more details
 CLASSIFIERS = [
@@ -19,7 +19,7 @@ CLASSIFIERS = [
     ]
   
 # calling the setup function 
-setup(name='mygmap',
+setup(name='simple_remote_function_call',
       version='0.1',
       description='A simple remote function call server and client.',
       long_description=long_description,
@@ -27,8 +27,13 @@ setup(name='mygmap',
       author='Fynn Firouz Faber',
       author_email='faberf@ethz.ch',
       license='MIT',
-      packages=['simple_remote_function_call_client', "simple_remote_function_call_server"],
+      packages=['simple_remote_function_call'],
       classifiers=CLASSIFIERS,
       install_requires=REQUIREMENTS,
-      keywords='remote server client function'
+      keywords='remote server client function',
+      entry_points={
+            'console_scripts': [
+                'srfc_start=simple_remote_function_call:start_server',
+            ],
+        },
       )

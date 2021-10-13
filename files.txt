@@ -1,0 +1,2 @@
+/home/faberf/anaconda3/envs/testenv1/lib/python3.9/site-packages/mygmap-0.1-py3.9.egg
+/home/faberf/anaconda3/envs/testenv1/bin/flask

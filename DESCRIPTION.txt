@@ -1,0 +1,1 @@
+After installation, the server can be run using srfc_start. The client 
