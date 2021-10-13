@@ -1,0 +1,1 @@
+from simple_remote_function_call_server.globals import GLOBAL, register

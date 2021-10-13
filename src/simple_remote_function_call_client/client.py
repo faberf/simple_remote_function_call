@@ -1,32 +1,25 @@
 import pickle
 import http.client
-import string
-import random
-import hashlib
-
 CURRENT_VERSION = "0.1"
 
-LEN = 10
-
-def rand_string():
-    letters = string.ascii_letters + string.digits
-    return ''.join(random.choice(letters) for i in range(LEN))
 
 class Client:
 
-    def __init__(self, user_id, key, server_url):
-        self.user_id = user_id
-        self.key = key
-        self.server_url = server_url
-
+    def __init__(self, host, port):
+        self.host = host
+        self.port = port
     
-    def call(self, func_name, *args, **kwargs):
-        data = pickle.dumps((CURRENT_VERSION, self.make_auth(), func_name, args, kwargs))
-        conn = http.client.HTTPConnection(self.server_url)
-        conn.request("POST","/call",data)
-        return pickle.loads(conn.getresponse())
-
-    def make_ath(self):
-        x = rand_string()
-        return (self.user_id, x, hashlib.sha224(bytes(self.key) + bytes(x)).hexdigest())
-
+    def __getattr__(self, func_name):
+        def call(*args, **kwargs):
+            data = pickle.dumps((CURRENT_VERSION, func_name, args, kwargs))
+            conn = http.client.HTTPConnection(self.host, self.port)
+            conn.request("PUT","/call",data)
+            response = conn.getresponse()
+            r_data = response.read()
+            unpickled = pickle.loads(r_data)
+            status, result = unpickled
+            if status == "ERROR":
+                raise result
+            elif status == "SUCCESS":
+                return result
+        return call
